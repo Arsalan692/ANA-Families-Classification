@@ -81,7 +81,7 @@ been explained and agreed.
 | 2 | Exploratory data analysis (EDA) | Laptop | Done 8 Oct 2026: no size shortcut; file order follows specimens |
 | 3 | Preprocessing and packing | Laptop | Done 8 Oct 2026: `cells3_100.npz`, 111 MB; Drive upload by the user |
 | 4 | Splitting into folds | Laptop | Done 8 Oct 2026: 152 blocks dealt into 5 balanced folds |
-| 5 | Baseline: pretrained ResNet-18 | Colab | Notebook `01_train_baseline` written and smoke-tested 8 Oct 2026; pilot run by the user pending |
+| 5 | Baseline: pretrained ResNet-18 | Colab | 5 rounds done 9 Oct 2026: test balanced accuracy 0.890 ± 0.028 (`adjusted`, block split); random-split diagnostic pending |
 | 6 | Comparison with other models | Colab | Postponed (optional) |
 | 7 | Calibration | Colab | Not started |
 | 8 | Final evaluation and error analysis | Colab + laptop | Not started |
@@ -256,6 +256,40 @@ confusion matrix; learning curves look sane (no collapse, no wild overfitting).
 - Training loss (about 0.05) is far below validation loss (about 0.3): the network fits the training
   slides much better than unseen slides. To be addressed after the baseline is complete.
 
+**Full run, 5 rounds (9 October 2026, block split):**
+
+| Mode | Validation bal. acc. | Test bal. acc. | Recall Hom (test) | Recall Spe (test) | Recall Nuc (test) | Macro F1 | Kappa | AUC |
+|---|---|---|---|---|---|---|---|---|
+| raw | 0.891 ± 0.024 | 0.884 ± 0.028 | 0.877 ± 0.092 | 0.845 ± 0.088 | 0.930 ± 0.024 | 0.884 ± 0.028 | 0.824 ± 0.042 | 0.976 ± 0.011 |
+| adjusted | 0.891 ± 0.009 | 0.890 ± 0.028 | 0.865 ± 0.033 | 0.870 ± 0.061 | 0.935 ± 0.030 | 0.890 ± 0.028 | 0.833 ± 0.043 | 0.976 ± 0.011 |
+
+Test balanced accuracy per round (0 to 4): raw 0.883, 0.876, 0.881, 0.934, 0.848; adjusted 0.896,
+0.898, 0.859, 0.936, 0.861.
+
+Pooled test confusion matrix, `adjusted` (rows = true class, % of the row):
+
+| | Homogeneous | Speckled | Nucleolar |
+|---|---|---|---|
+| Homogeneous | 86.4 | 12.0 | 1.6 |
+| Speckled | 10.9 | 87.0 | 2.1 |
+| Nucleolar | 2.9 | 3.6 | 93.5 |
+
+- **Brightness mode chosen: `adjusted`.** The two modes tie on mean validation balanced accuracy
+  (0.891). The tie is broken by stability: the validation spread of `adjusted` is under half that of
+  `raw` (0.009 against 0.024). It also removes the slide-brightness cue found in the EDA. Test scores
+  were not used for the choice.
+- `raw` is unstable between Homogeneous and Speckled: its Homogeneous recall runs from 0.71 to 0.97
+  and its Speckled recall from 0.76 to 0.95 depending on the round. `adjusted` stays within 0.81 to
+  0.90 and 0.76 to 0.95.
+- The spread between rounds (0.028) is larger than the difference between the modes (0.006). Which
+  blocks land in the test fold matters more than the brightness mode.
+- Homogeneous ↔ Speckled is the main error in both directions (about 11 to 12%). Nucleolar is the
+  easiest class.
+- The best epoch ranges from 2 to 15 and validation accuracy moves by several points between epochs,
+  so the model is fitted to the training slides within a few epochs. This is the main thing to
+  improve.
+- Still to do in this phase: the random-split diagnostic run, and a look at the learning-curve charts.
+
 ### Phase 6: Comparison (postponed, optional)
 
 **Goal:** check whether another model does better than the baseline.
@@ -334,4 +368,5 @@ Model Training on Basic Classes/
 | 8 Oct 2026 | Three families: Homogeneous, Speckled, Nucleolar. Centromere postponed |
 | 8 Oct 2026 | Pretrained only for now (ResNet-18). From-scratch and other models moved to an optional Phase 6 |
 | 8 Oct 2026 | Brightness rule relaxed by the user: preprocessing may alter brightness or contrast where appropriate |
+| 9 Oct 2026 | Brightness mode `adjusted` (per-cell stretch) chosen: ties `raw` on mean validation score, with less than half the spread |
 | 8 Oct 2026 | Own public GitHub repository `ANA-Families-Classification` (code and docs only; dataset files stay ignored) |
