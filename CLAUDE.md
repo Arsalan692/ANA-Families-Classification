@@ -63,9 +63,11 @@ Context for Claude Code sessions on this project. Last updated 8 October 2026.
 
 - **Checked 8 October 2026:** all files open, no exact duplicates, sizes 62 to 100 px (typically
   71×71), brightness untouched (no image reaches 255).
-- **No specimen IDs.** Cells from one slide look alike, so a random split leaks. The plan (section 4)
-  tests whether file order follows specimens and, if so, splits by contiguous blocks of file numbers.
-  Every reported number must say which kind of split produced it.
+- **No specimen IDs.** Cells from one slide look alike, so a random split leaks. File order follows
+  specimens (Phase 2), so `scripts/make_folds.py` cuts each class into blocks of consecutive files at
+  brightness jumps (152 blocks) and deals whole blocks into 5 folds. `sample_id` in the manifest holds
+  the block name: a derived stand-in, not a real specimen ID. Every reported number must say it comes
+  from this block split.
 - **Published reference on all six classes** (hand-crafted descriptors, split protocol unknown):
   86.61% mean class accuracy; Homogeneous ↔ Speckled is the most confused pair.
 

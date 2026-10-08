@@ -1,0 +1,48 @@
+Homogeneous   54 blocks; files per block: smallest 30, typical 266, largest 574
+Speckled      57 blocks; files per block: smallest 33, typical 271, largest 929
+Nucleolar     41 blocks; files per block: smallest 58, typical 275, largest 697
+
+IMAGES per fold:
+label  Homogeneous  Speckled  Nucleolar  total
+fold                                          
+0             2962      2944       2644   8550
+1             2834      2919       2605   8358
+2             2805      2925       2603   8333
+3             2823      2944       2581   8348
+4             2943      2923       2824   8690
+
+CLASS MIX per fold (% of the fold):
+label  Homogeneous  Speckled  Nucleolar
+fold                                   
+0             34.6      34.4       30.9
+1             33.9      34.9       31.2
+2             33.7      35.1       31.2
+3             33.8      35.3       30.9
+4             33.9      33.6       32.5
+
+BLOCKS per fold:
+label  Homogeneous  Speckled  Nucleolar
+fold                                   
+0               11        11          8
+1               11        12          7
+2                9        11          9
+3               11        12          8
+4               12        11          9
+
+TYPICAL BRIGHTNESS per fold (median of average brightness):
+label  Homogeneous  Speckled  Nucleolar
+fold                                   
+0             28.5      28.2       24.1
+1             26.6      28.0       22.4
+2             25.0      30.1       25.0
+3             29.6      28.3       20.4
+4             28.8      30.7       22.5
+
+ROUNDS: test = fold k, validation = fold k+1, training = the other three
+  round 0: test fold 0 (8550), validation fold 1 (8358), training 25371
+  round 1: test fold 1 (8358), validation fold 2 (8333), training 25588
+  round 2: test fold 2 (8333), validation fold 3 (8348), training 25598
+  round 3: test fold 3 (8348), validation fold 4 (8690), training 25241
+  round 4: test fold 4 (8690), validation fold 0 (8550), training 25039
+
+Brightness-only classifier on these folds: balanced accuracy 0.703 (Phase 2: 0.864 random folds, 0.699 consecutive fifths)

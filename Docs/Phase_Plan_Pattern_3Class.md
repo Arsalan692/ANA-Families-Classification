@@ -80,7 +80,7 @@ been explained and agreed.
 | 1 | Manifest and cleaning | Laptop | Done 8 Oct 2026: 42,279 images, nothing dropped |
 | 2 | Exploratory data analysis (EDA) | Laptop | Done 8 Oct 2026: no size shortcut; file order follows specimens |
 | 3 | Preprocessing and packing | Laptop | Done 8 Oct 2026: `cells3_100.npz`, 111 MB; Drive upload by the user |
-| 4 | Splitting into folds | Laptop | Not started |
+| 4 | Splitting into folds | Laptop | Done 8 Oct 2026: 152 blocks dealt into 5 balanced folds |
 | 5 | Baseline: pretrained ResNet-18 | Colab | Not started |
 | 6 | Comparison with other models | Colab | Postponed (optional) |
 | 7 | Calibration | Colab | Not started |
@@ -194,6 +194,21 @@ size the network sees (96 as planned, or smaller) can be chosen in Phase 5.
 5. Save the fold column into the manifest and re-upload.
 
 **Check:** fold table printed and agreed; all assertions pass.
+
+**Result (8 October 2026, `outputs/folds/`):**
+
+- **Blocks:** a cut is made where the median brightness or contrast of the 30 files after a position
+  differs from the 30 files before it by at least 3 times the normal cell-to-cell variation. This
+  gives 54 Homogeneous, 57 Speckled and 41 Nucleolar blocks (152 in total), typically about 270 files
+  each. The block name is stored in `sample_id`. It is a derived stand-in, not a real specimen ID.
+- **Folds:** whole blocks are dealt into 5 folds with `StratifiedGroupKFold` (seed 42), stratified by
+  class and by dim/bright block. Folds hold 8,333 to 8,690 images, each class is 31 to 35% of every
+  fold, and typical brightness is similar across folds.
+- **Rounds:** test = fold k, validation = fold k+1, training = the other three (about 25,000 images).
+- **Leakage check:** the brightness-only classifier scores 0.703 on these folds, against 0.699 on plain
+  consecutive fifths and 0.864 on random folds. Spreading the blocks did not bring leakage back.
+- **Remaining limit:** two neighbouring blocks may be two photographs of the same slide and can land
+  in different folds. Only real specimen IDs can rule that out.
 
 ### Phase 5: Baseline, pretrained ResNet-18
 
