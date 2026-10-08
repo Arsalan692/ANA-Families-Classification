@@ -86,7 +86,7 @@ been explained and agreed.
 | 7 | Calibration | Colab (no GPU) | Done 9 Oct 2026: calibration error 0.047 → 0.022, mean temperature 1.52 |
 | 8 | Final evaluation and error analysis | Colab + laptop | Not started |
 | 9 | Prediction script | Laptop | Done 9 Oct 2026 (before Phase 8): `predict_pattern.py`, self-test 200/200 |
-| 10 | Write-up | Laptop | Not started |
+| 10 | Write-up | Laptop | Supervisor report written 9 Oct 2026 (`Docs/ANA_Pattern_3Class_Report.pdf`, Phases 0 to 5; kept off GitHub because it embeds sample cells) |
 
 ### Phase 0: Setup
 

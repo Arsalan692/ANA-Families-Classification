@@ -10,6 +10,8 @@ data/
 # Outputs that embed dataset images or list every image with its label
 outputs/**/samples/
 outputs/**/image_*.csv
+# Report for the supervisor: it embeds sample cell images from the dataset
+Docs/ANA_Pattern_3Class_Report.pdf
 
 # Project documents with personal / team details (kept local)
 Docs/FYP-I_Project_Proposal_updated.docx
@@ -46,6 +48,3 @@ env/
 desktop.ini
 Thumbs.db
 .DS_Store
-
-# Reports that embed dataset images (Figure 1 shows sample cells)
-Docs/*.pdf
