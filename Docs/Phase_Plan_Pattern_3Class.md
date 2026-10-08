@@ -76,8 +76,8 @@ been explained and agreed.
 
 | # | Phase | Runs on | Status |
 |---|---|---|---|
-| 0 | Setup | Laptop + Colab | Laptop part done 8 Oct 2026; Colab check to be run by the user |
-| 1 | Manifest and cleaning | Laptop | Not started |
+| 0 | Setup | Laptop + Colab | Done 8 Oct 2026 (Colab check passed) |
+| 1 | Manifest and cleaning | Laptop | Done 8 Oct 2026: 42,279 images, nothing dropped |
 | 2 | Exploratory data analysis (EDA) | Laptop | Not started |
 | 3 | Preprocessing and packing | Laptop | Not started |
 | 4 | Splitting into folds | Laptop | Not started |

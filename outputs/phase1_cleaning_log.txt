@@ -1,0 +1,12 @@
+labels.mat: 63445 labels; per label {1: 14367, 2: 14655, 3: 13257, 4: 13737, 5: 5086, 6: 2343}
+Image files on disk: 63445; labels without a file: 0; files without a label: 0
+Kept labels [1, 2, 3] (Homogeneous, Speckled, Nucleolar): 42279 images; left out 21166 images of other classes
+Opened 42279 images: unreadable 0, not greyscale 0
+Exact-duplicate groups: 0; images dropped: 0
+
+================ SUMMARY ================
+Images kept : 42279
+  label 0  Homogeneous   14367 images   file numbers 1 to 14367
+  label 1  Speckled      14655 images   file numbers 14368 to 29022
+  label 2  Nucleolar     13257 images   file numbers 29023 to 42279
+Specimen IDs: none in this dataset (sample_id left empty)
