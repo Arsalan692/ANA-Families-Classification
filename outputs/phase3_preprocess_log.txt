@@ -1,0 +1,6 @@
+Packed 42279 images into cells3_100.npz
+  array shape (42279, 100, 100), type uint8
+  per class: Homogeneous 14367, Speckled 14655, Nucleolar 13257
+  file size on disk 111 MB; in memory 423 MB
+  real image area covers 53% of the canvases; the rest is black border
+  verified: labels and row order match the manifest; 500 random images are pixel-identical to the originals with a pure black border

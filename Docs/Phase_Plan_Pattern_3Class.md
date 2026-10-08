@@ -79,7 +79,7 @@ been explained and agreed.
 | 0 | Setup | Laptop + Colab | Done 8 Oct 2026 (Colab check passed) |
 | 1 | Manifest and cleaning | Laptop | Done 8 Oct 2026: 42,279 images, nothing dropped |
 | 2 | Exploratory data analysis (EDA) | Laptop | Done 8 Oct 2026: no size shortcut; file order follows specimens |
-| 3 | Preprocessing and packing | Laptop | Not started |
+| 3 | Preprocessing and packing | Laptop | Done 8 Oct 2026: `cells3_100.npz`, 111 MB; Drive upload by the user |
 | 4 | Splitting into folds | Laptop | Not started |
 | 5 | Baseline: pretrained ResNet-18 | Colab | Not started |
 | 6 | Comparison with other models | Colab | Postponed (optional) |
@@ -172,6 +172,15 @@ spread those blocks over the folds, so every fold contains both dim and bright s
 If Phase 2 finds a size shortcut, padding is replaced by a fixed resize before this phase is run.
 
 **Check:** reload test passes; file is on Drive.
+
+**Result (8 October 2026):** 42,279 canvases of 100×100 in `data/cells3_100.npz`, 111 MB on disk and
+423 MB in memory, reloading in about 2 seconds. Labels and row order match the manifest, and 500
+random images are pixel-identical to the originals with a pure black border. The file also stores each
+image's original height and width, so later steps can ignore the border.
+
+**Point carried to Phase 5:** real image covers only 53% of the canvas area, because a typical cell is
+71×71 and the canvas is sized for the rare 100-pixel ones. The stored file loses nothing, so the crop
+size the network sees (96 as planned, or smaller) can be chosen in Phase 5.
 
 ### Phase 4: Splitting
 
