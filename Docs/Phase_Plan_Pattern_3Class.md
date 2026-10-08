@@ -83,7 +83,7 @@ been explained and agreed.
 | 4 | Splitting into folds | Laptop | Done 8 Oct 2026: 152 blocks dealt into 5 balanced folds |
 | 5 | Baseline: pretrained ResNet-18 | Colab | 5 rounds done 9 Oct 2026: test balanced accuracy 0.890 ± 0.028 (`adjusted`, block split); random-split diagnostic skipped (optional, can be run later) |
 | 6 | Comparison with other models | Colab | Postponed (optional) |
-| 7 | Calibration | Colab (no GPU) | Notebook `03_calibrate` written and smoke-tested 9 Oct 2026; run by the user pending |
+| 7 | Calibration | Colab (no GPU) | Done 9 Oct 2026: calibration error 0.047 → 0.022, mean temperature 1.52 |
 | 8 | Final evaluation and error analysis | Colab + laptop | Not started |
 | 9 | Prediction script | Laptop | Not started |
 | 10 | Write-up | Laptop | Not started |
@@ -290,7 +290,9 @@ Pooled test confusion matrix, `adjusted` (rows = true class, % of the row):
   improve.
 - The random-split diagnostic run was skipped on 9 October 2026 (user's decision). It is optional: the
   Phase 4 brightness-only test already shows the leak (0.864 random against 0.703 blocks).
-- Still to do: a look at the learning-curve charts once the outputs are copied back.
+- Learning curves (checked 9 October 2026): training loss falls smoothly to about 0.05 in every
+  round; validation loss stays flat and jagged between 0.25 and 0.55 from the first epochs. No
+  collapse. The gap is the overfitting to training slides noted above.
 
 ### Phase 6: Comparison (postponed, optional)
 
@@ -319,6 +321,37 @@ and measured on the test images. It reports the expected calibration error (15 c
 the loss and the Brier score before and after, a table of accuracy when only confident answers are
 accepted, and a reliability chart. Outputs go to `outputs/resnet18_adjusted/calibration/`.
 Smoke-tested on synthetic logits with a known temperature of 2.0 (recovered 1.93 to 2.07).
+
+**Result (9 October 2026, `resnet18_adjusted`, block split, test folds):**
+
+| Measure | Before | After |
+|---|---|---|
+| Expected calibration error, mean over rounds | 0.047 ± 0.013 | 0.022 ± 0.012 |
+| Expected calibration error, test folds pooled | 0.046 | 0.013 |
+| Mean confidence (accuracy is 0.889) | 0.935 | 0.900 |
+| Loss (NLL) | 0.310 ± 0.067 | 0.279 ± 0.067 |
+| Brier score | 0.167 ± 0.041 | 0.160 ± 0.040 |
+
+Temperatures per round (0 to 4): 1.52, 1.80, 1.13, 1.65, 1.51 (mean 1.52 ± 0.22).
+
+| Minimum confidence | Cells kept | Accuracy on kept | Cells left for a human |
+|---|---|---|---|
+| 0.50 | 97.8% | 89.8% | 909 |
+| 0.70 | 87.2% | 93.6% | 5,417 |
+| 0.80 | 80.6% | 95.4% | 8,184 |
+| 0.90 | 70.6% | 97.3% | 12,417 |
+| 0.95 | 60.7% | 98.3% | 16,633 |
+
+- The network was overconfident (every temperature is above 1). Scaling roughly halves the
+  calibration error in every round and never changes an answer. Check passed.
+- Round 2 gains least (0.055 to 0.045): its validation fold asked for a temperature of only 1.13,
+  while its test fold needed more. The temperature depends on which slides are used to fit it.
+- After scaling, a small overconfidence remains between 0.75 and 0.90 stated confidence (about 4 to 5
+  points).
+- Confidence is a usable filter: accepting only answers at 0.90 or above keeps 70.6% of cells at
+  97.3% accuracy.
+- For Phase 9: the temperature belongs to the model it was fitted with. The deployed model and its
+  temperature are chosen together.
 
 ### Phase 8: Final evaluation and error analysis
 
