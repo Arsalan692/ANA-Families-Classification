@@ -241,6 +241,21 @@ size the network sees (96 as planned, or smaller) can be chosen in Phase 5.
 **Check:** 5 rounds finished; table of balanced accuracy, per-class recall, F1 and kappa as mean ± std;
 confusion matrix; learning curves look sane (no collapse, no wild overfitting).
 
+**Pilot, round 0 only (8 October 2026, block split):**
+
+| Mode | Validation bal. acc. | Test bal. acc. | Recall Hom / Spe / Nuc (test) | Best epoch | Minutes |
+|---|---|---|---|---|---|
+| raw | 0.918 | 0.883 | 0.967 / 0.770 / 0.912 | 9 | 6.4 |
+| adjusted | 0.888 | 0.896 | 0.902 / 0.873 / 0.913 | 6 | 5.2 |
+
+- Validation prefers raw, test prefers adjusted, and validation accuracy moves by several points from
+  one epoch to the next. One round cannot separate the two modes, so both are run for all 5 rounds
+  and the choice is made on mean validation balanced accuracy.
+- Both are far above the 0.70 brightness-only floor.
+- Main error in both: Speckled called Homogeneous (21.4% raw, 11.0% adjusted).
+- Training loss (about 0.05) is far below validation loss (about 0.3): the network fits the training
+  slides much better than unseen slides. To be addressed after the baseline is complete.
+
 ### Phase 6: Comparison (postponed, optional)
 
 **Goal:** check whether another model does better than the baseline.
