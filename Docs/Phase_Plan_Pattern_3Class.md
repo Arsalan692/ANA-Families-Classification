@@ -85,7 +85,7 @@ been explained and agreed.
 | 6 | Comparison with other models | Colab | Postponed (optional) |
 | 7 | Calibration | Colab (no GPU) | Done 9 Oct 2026: calibration error 0.047 → 0.022, mean temperature 1.52 |
 | 8 | Final evaluation and error analysis | Colab + laptop | Not started |
-| 9 | Prediction script | Laptop | Not started |
+| 9 | Prediction script | Laptop | Done 9 Oct 2026 (before Phase 8): `predict_pattern.py`, self-test 200/200 |
 | 10 | Write-up | Laptop | Not started |
 
 ### Phase 0: Setup
@@ -376,6 +376,31 @@ Temperatures per round (0 to 4): 1.52, 1.80, 1.13, 1.65, 1.51 (mean 1.52 ± 0.22
 
 **Check:** script reproduces the saved test predictions for a sample of images.
 
+**Done 9 October 2026 (brought forward, before Phase 8, for the web app):** `scripts/predict_pattern.py`.
+
+- Self-contained: the web app needs this one file plus the model folder (`round_k/best.pt`,
+  `round_k/metrics.json`, `calibration/temperatures.json`). Usable from the command line or as
+  `PatternPredictor().predict(path_or_PIL_image)`.
+- Accepts colour or greyscale input: the brightest colour channel is kept. Images above 100 px are
+  shrunk to fit 100 px. Then the training steps: canvas, brightness stretch, centre crop 88,
+  enlargement to 176, normalisation.
+- **Deployed model: the average of all 5 round models**, each divided by its own temperature first.
+  Reason: no single round is special, and averaging reduces the dependence on which slides a model
+  saw. Its accuracy cannot be measured honestly on this dataset, because every image was a training
+  image for three of the five models; the reported figure stays the cross-validated 0.890 of single
+  models. `--rounds 0` uses one model only (5 times less disk and time).
+- Returns the family, the calibrated confidence, the three probabilities and an `uncertain` flag
+  (confidence below 0.70 by default).
+- **Check passed** (`--self-test`): 200 original PNGs (40 per round, test fold) through the whole
+  pipeline give the same answer as the saved outputs in 200 of 200 cases; largest difference in raw
+  output 0.05 (GPU mixed precision against CPU).
+- A green copy of a cell gives exactly the same output as the greyscale original.
+- **Known weakness: cell size.** The same cell enlarged 2× (then shrunk to 100 px, so 1.4× its
+  training size) keeps its answer but loses 20 to 25 points of confidence. Images from other
+  microscopes need the cell at roughly the training scale (about 70 px across). If outside images
+  score poorly, the next step is to size the cell automatically or to add scale augmentation in
+  training.
+
 ### Phase 10: Write-up
 
 Update this plan and `CLAUDE.md`, and produce the explanation document for the supervisor.
@@ -410,5 +435,7 @@ Model Training on Basic Classes/
 | 8 Oct 2026 | Three families: Homogeneous, Speckled, Nucleolar. Centromere postponed |
 | 8 Oct 2026 | Pretrained only for now (ResNet-18). From-scratch and other models moved to an optional Phase 6 |
 | 8 Oct 2026 | Brightness rule relaxed by the user: preprocessing may alter brightness or contrast where appropriate |
+| 9 Oct 2026 | Random-split diagnostic skipped; Phase 9 (prediction script) done before Phase 8 because the web app needs it |
+| 9 Oct 2026 | Deployed model = average of the 5 round models, each with its own temperature |
 | 9 Oct 2026 | Brightness mode `adjusted` (per-cell stretch) chosen: ties `raw` on mean validation score, with less than half the spread |
 | 8 Oct 2026 | Own public GitHub repository `ANA-Families-Classification` (code and docs only; dataset files stay ignored) |

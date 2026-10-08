@@ -1,0 +1,57 @@
+run = resnet18_adjusted | rounds [0, 1, 2, 3, 4] | temperature fitted on validation, measured on test | 15 bins
+
+A. Per round (test fold)
+ round  temperature  test_accuracy  mean_conf_before  mean_conf_after  ece_before  ece_after  nll_before  nll_after  brier_before  brier_after
+     0       1.5218         0.8953            0.9354           0.8973      0.0400     0.0211      0.2565     0.2420        0.1485       0.1414
+     1       1.8008         0.8960            0.9562           0.9165      0.0604     0.0217      0.3254     0.2531        0.1622       0.1473
+     2       1.1263         0.8559            0.9096           0.8969      0.0550     0.0447      0.3930     0.3768        0.2164       0.2132
+     3       1.6493         0.9348            0.9595           0.9242      0.0257     0.0134      0.2131     0.1908        0.1030       0.1019
+     4       1.5082         0.8605            0.9136           0.8674      0.0530     0.0101      0.3626     0.3333        0.2040       0.1957
+
+B. Mean ± std over 5 round(s)
+   temperature        1.521 ± 0.224
+   test_accuracy      0.889 ± 0.029
+   mean_conf_before   0.935 ± 0.021
+   mean_conf_after    0.900 ± 0.020
+   ece_before         0.047 ± 0.013
+   ece_after          0.022 ± 0.012
+   nll_before         0.310 ± 0.067
+   nll_after          0.279 ± 0.067
+   brier_before       0.167 ± 0.041
+   brier_after        0.160 ± 0.040
+
+C. Accepting only confident answers (after calibration, all test folds together)
+min_confidence  cells_kept_%  accuracy_on_kept_%  cells_sent_to_human
+          0.50          97.8                89.8                  909
+          0.60          92.7                91.8                 3098
+          0.70          87.2                93.6                 5417
+          0.80          80.6                95.4                 8184
+          0.90          70.6                97.3                12417
+          0.95          60.7                98.3                16633
+
+D. Calibration groups, all test folds together (n = images in the group)
+   before: overall calibration error 0.0464
+    n  confidence  accuracy
+   60       0.377     0.300
+  199       0.438     0.432
+  700       0.508     0.476
+ 1021       0.566     0.533
+ 1050       0.634     0.536
+ 1151       0.700     0.600
+ 1327       0.767     0.655
+ 1695       0.835     0.701
+ 2623       0.904     0.777
+32453       0.992     0.962
+
+   after: overall calibration error 0.0128
+    n  confidence  accuracy
+  129       0.379     0.357
+  382       0.437     0.455
+ 1165       0.506     0.516
+ 1422       0.566     0.534
+ 1536       0.634     0.618
+ 1630       0.700     0.679
+ 1920       0.768     0.731
+ 2512       0.836     0.787
+ 4165       0.904     0.884
+27418       0.985     0.980
