@@ -39,7 +39,7 @@ so that adding a class later means changing one line in the config and re-runnin
 | Main model | ResNet-18, ImageNet-pretrained | Likely a little more accurate and more robust on new data than training from scratch; small, fast and well understood |
 | Comparison | Postponed | Other pretrained models or a from-scratch run can be added later on the same folds |
 | Framework | PyTorch on Colab T4; CPU steps on the laptop | Same as Stage 1 |
-| Brightness | Never stretched or equalised | Project hard rule: brightness is signal |
+| Brightness | Stored images stay raw; brightness changes are allowed in training code when justified | Raw storage loses nothing; a per-image brightness adjustment can then be tested against raw input |
 | Evaluation | 5-fold cross-validation, mean ± std | A single split depends too much on luck |
 | Headline metric | Balanced accuracy, plus per-class recall, F1, Cohen's kappa, confusion matrix | Matches the proposal's evaluation section |
 
@@ -287,4 +287,5 @@ Model Training on Basic Classes/
 | 8 Oct 2026 | Use the Qi 63,445-cell dataset; set I3A Task-1 aside until the official copy arrives |
 | 8 Oct 2026 | Three families: Homogeneous, Speckled, Nucleolar. Centromere postponed |
 | 8 Oct 2026 | Pretrained only for now (ResNet-18). From-scratch and other models moved to an optional Phase 6 |
+| 8 Oct 2026 | Brightness rule relaxed by the user: preprocessing may alter brightness or contrast where appropriate |
 | 8 Oct 2026 | Own public GitHub repository `ANA-Families-Classification` (code and docs only; dataset files stay ignored) |

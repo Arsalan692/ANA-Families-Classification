@@ -35,9 +35,9 @@ Context for Claude Code sessions on this project. Last updated 8 October 2026.
   Private Google Drive only. `.gitignore` enforces this; keep it that way. The same applies to AIDA.
 - **Pixels only.** No metadata is given to the model.
 - **Specimen / file-order information is used only for splitting**, never given to the model.
-- **Do not change image brightness or contrast** (no contrast stretching, histogram equalisation,
-  auto-levels). In ANA images brightness is the signal. A single fixed mean/std normalisation applied
-  identically to every image is allowed.
+- **Brightness and contrast may be changed when it is technically justified** (user's decision,
+  8 October 2026; the Stage 1 ban does not apply here). Keep the stored images raw and apply any
+  such change in code, so it can be switched on, off or compared. Say why whenever one is used.
 - **Test data is used once, at the end.** Epoch selection, early stopping and model choice use
   validation only.
 - Results are for research and demonstration, not diagnosis.
