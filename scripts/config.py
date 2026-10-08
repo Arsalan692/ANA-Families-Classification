@@ -36,7 +36,8 @@ SOURCE = "QiCells"
 SEED = 42              # fixed random seed -> reproducible splits/training
 N_FOLDS = 5            # 5-fold cross-validation
 CANVAS_SIZE = 100      # each cell is centred on a 100x100 black canvas (no resize)
-CROP_SIZE = 96         # model input: random crop in training, centre crop otherwise
+CROP_SIZE = 88         # centre region of the canvas that the network sees
+INPUT_SIZE = 176       # the crop is enlarged 2x before it enters the network
 
 # Standard manifest columns -- identical for every dataset (design rule),
 # followed by the extras this dataset needs.

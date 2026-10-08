@@ -81,7 +81,7 @@ been explained and agreed.
 | 2 | Exploratory data analysis (EDA) | Laptop | Done 8 Oct 2026: no size shortcut; file order follows specimens |
 | 3 | Preprocessing and packing | Laptop | Done 8 Oct 2026: `cells3_100.npz`, 111 MB; Drive upload by the user |
 | 4 | Splitting into folds | Laptop | Done 8 Oct 2026: 152 blocks dealt into 5 balanced folds |
-| 5 | Baseline: pretrained ResNet-18 | Colab | Not started |
+| 5 | Baseline: pretrained ResNet-18 | Colab | Notebook `01_train_baseline` written and smoke-tested 8 Oct 2026; pilot run by the user pending |
 | 6 | Comparison with other models | Colab | Postponed (optional) |
 | 7 | Calibration | Colab | Not started |
 | 8 | Final evaluation and error analysis | Colab + laptop | Not started |
@@ -217,11 +217,18 @@ size the network sees (96 as planned, or smaller) can be chosen in Phase 5.
 - **Model:** `timm` ResNet-18 with ImageNet weights, `num_classes=3`, `in_chans=1` (timm converts the
   pretrained colour filters of the first layer to one greyscale channel). About 11 million weights.
   All layers are fine-tuned.
-- **Input:** random 96×96 crop in training, centre 96×96 crop in validation and test.
-- **Augmentation** (random changes that create variety): horizontal and vertical flips, rotation by any
-  angle, brightness ±10% (same limit as Stage 1). Rotation matters because a cell has no "up".
-- **Normalisation:** subtract the mean and divide by the standard deviation of the training pixels.
-  This is one fixed formula for all images, not a per-image stretch.
+- **Input:** the centre 88×88 of the canvas, enlarged 2× to 176×176. An 88 crop trims the edges of
+  only 7% of cells and raises the share of real image from 53% to 68%. The enlargement is there
+  because a pretrained ResNet shrinks its input 32 times; a 71-pixel cell would otherwise be reduced
+  to almost nothing before the deeper layers see it.
+- **Augmentation** (random changes that create variety, training only): mirror flips, rotation by any
+  angle, a shift of up to 4 pixels, brightness ±10%. Rotation matters because a cell has no "up".
+- **Two brightness modes, compared on validation:** `raw` (pixels as stored) and `adjusted` (each cell
+  stretched so its background, the 5th percentile, becomes black and its bright spots, the 99.5th
+  percentile, become white; measured on the real image area only). A pilot on round 0 trains both;
+  the better one on validation is used for all 5 rounds.
+- **Normalisation:** subtract the mean and divide by the standard deviation of the training pixels of
+  that round.
 - **Loss:** cross-entropy over 3 classes (the standard loss when exactly one class is correct).
 - **Training:** AdamW, learning rate 3e-4, weight decay 1e-2, 1 warm-up epoch then cosine decay, mixed
   precision, batch 128, at most 30 epochs, early stopping with patience 7 on validation balanced
