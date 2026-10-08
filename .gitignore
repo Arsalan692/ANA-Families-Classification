@@ -46,3 +46,6 @@ env/
 desktop.ini
 Thumbs.db
 .DS_Store
+
+# Reports that embed dataset images (Figure 1 shows sample cells)
+Docs/*.pdf
