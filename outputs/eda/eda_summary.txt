@@ -1,0 +1,31 @@
+IMAGE SIZE per class (pixels):
+             width                    height                    aspect                 
+              mean   min   50%    max   mean   min   50%    max   mean   min  50%   max
+label                                                                                  
+Homogeneous  72.61  62.0  71.0  100.0  72.66  62.0  72.0  100.0   1.01  0.64  1.0  1.61
+Speckled     72.47  62.0  71.0  100.0  72.44  62.0  71.0  100.0   1.01  0.63  1.0  1.59
+Nucleolar    72.67  62.0  71.0  100.0  72.69  62.0  71.0  100.0   1.01  0.64  1.0  1.59
+
+BRIGHTNESS per class (0 = black, 255 = white):
+             mean                      p05                     p99                      max                   
+             mean   min   50%    max  mean   min   50%   max  mean   min   50%    max  mean   min   50%    max
+label                                                                                                         
+Homogeneous  30.9  17.8  28.2   82.6  18.8  13.0  18.0  53.0  52.0  21.0  45.0  254.0  58.6  22.0  51.0  254.0
+Speckled     34.0  17.1  29.2  110.8  19.8  13.0  19.0  48.0  66.4  22.0  48.0  254.0  81.5  25.0  59.0  254.0
+Nucleolar    28.2  15.9  23.5  108.6  18.9  13.0  18.0  52.0  74.2  19.0  45.0  254.0  89.2  21.0  57.0  254.0
+
+SHORTCUT TESTS: balanced accuracy of a simple classifier (chance = 0.333)
+  what the classifier sees                                 random folds   block folds
+  size only (width, height, area, aspect)                       0.339         0.335
+  average brightness only                                       0.471         0.408
+  six brightness numbers (mean, std, p05, p50, p99, max)        0.864         0.699
+
+FILE-ORDER TEST: are neighbouring files more alike than far-apart ones?
+  Homogeneous | mean: neighbour gap 1.19 vs random-pair gap 7.78 (ratio 0.15) | p05: neighbour gap 1.00 vs random-pair gap 2.00 (ratio 0.50)
+  Speckled | mean: neighbour gap 1.38 vs random-pair gap 10.33 (ratio 0.13) | p05: neighbour gap 1.00 vs random-pair gap 3.00 (ratio 0.33)
+  Nucleolar | mean: neighbour gap 0.98 vs random-pair gap 8.54 (ratio 0.11) | p05: neighbour gap 1.00 vs random-pair gap 3.00 (ratio 0.33)
+  Autocorrelation of average brightness along file order (1 = neighbours identical, 0 = unrelated):
+  lag (files apart)       1      2      5     10     20     50    100    200    500   1000   2000
+  Homogeneous          0.95   0.95   0.94   0.92   0.89   0.80   0.68   0.43   0.07   0.15  -0.12
+  Speckled             0.95   0.95   0.94   0.93   0.91   0.86   0.78   0.63   0.47   0.40   0.48
+  Nucleolar            0.92   0.92   0.91   0.90   0.88   0.81   0.71   0.52   0.53   0.39   0.15

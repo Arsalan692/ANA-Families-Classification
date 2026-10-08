@@ -78,7 +78,7 @@ been explained and agreed.
 |---|---|---|---|
 | 0 | Setup | Laptop + Colab | Done 8 Oct 2026 (Colab check passed) |
 | 1 | Manifest and cleaning | Laptop | Done 8 Oct 2026: 42,279 images, nothing dropped |
-| 2 | Exploratory data analysis (EDA) | Laptop | Not started |
+| 2 | Exploratory data analysis (EDA) | Laptop | Done 8 Oct 2026: no size shortcut; file order follows specimens |
 | 3 | Preprocessing and packing | Laptop | Not started |
 | 4 | Splitting into folds | Laptop | Not started |
 | 5 | Baseline: pretrained ResNet-18 | Colab | Not started |
@@ -133,6 +133,28 @@ unrelated to the pattern that still reveals the label, such as image size.
 
 **Check:** a written answer to three questions: is there a size shortcut, is there a brightness
 shortcut, does file order follow specimens.
+
+**Result (8 October 2026, `outputs/eda/`):**
+
+- **Size shortcut: none.** A classifier that sees only width, height, area and aspect ratio scores
+  0.339 balanced accuracy; chance is 0.333. Padding to 100×100 is therefore safe.
+- **Brightness: no simple shortcut, but a useful reference line.** Average brightness alone scores
+  0.408 on block folds. Six brightness numbers (mean, spread, percentiles) score 0.699 on block folds.
+  Part of that is real pattern information (nucleolar cells have a few very bright spots), so it is a
+  floor the network must clearly beat, not something to remove.
+- **File order follows specimens: yes.** Brightness of neighbouring files has an autocorrelation of
+  0.92 to 0.95, and the chart shows flat plateaus with sharp jumps, each plateau being one slide or
+  one photograph of a slide. Neighbouring files differ by about 1 brightness unit, random pairs in the
+  same class by 8 to 10.
+- **Leakage measured.** The six-number classifier scores 0.864 with random folds and 0.699 with block
+  folds. Random splitting inflates the score by about 16 points even for this trivial model.
+- **Each class runs dim first, bright later.** The first half of every class is mostly dim slides
+  (brightness about 20 to 30), the second half brighter (40 to 60). Five plain consecutive fifths
+  would therefore give folds with very different brightness.
+- **No junk found** among the darkest, flattest and brightest cells; they are dim but show a pattern.
+
+**Consequence for Phase 4:** split by contiguous blocks, but cut at the detected plateau boundaries and
+spread those blocks over the folds, so every fold contains both dim and bright slides.
 
 ### Phase 3: Preprocessing and packing
 
