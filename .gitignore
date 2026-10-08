@@ -1,0 +1,48 @@
+# ---------------------------------------------------------------------------
+# Qi et al. HEp-2 cell dataset -- no licence is stated and it is derived from
+# the access-controlled I3A data, so nothing that contains the images or the
+# labels is tracked.
+# ---------------------------------------------------------------------------
+data/
+*.mat
+*.npz
+*.npy
+# Outputs that embed dataset images or list every image with its label
+outputs/**/samples/
+outputs/**/image_*.csv
+
+# Project documents with personal / team details (kept local)
+Docs/FYP-I_Project_Proposal_updated.docx
+Docs/ANA_Project_Context_Handoff.pdf
+
+# Trained models and other large binaries (stored on Google Drive)
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.safetensors
+*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Secrets
+.env
+.env.*
+
+# Editors, tools, OS
+.vscode/
+.idea/
+.claude/
+desktop.ini
+Thumbs.db
+.DS_Store

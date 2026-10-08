@@ -1,0 +1,10 @@
+# Libraries for the LOCAL laptop (data cleaning, EDA, preprocessing, splitting).
+# Install with:  python -m pip install -r requirements-local.txt
+# Model training runs on Google Colab, which has PyTorch pre-installed.
+pandas>=2.0
+scipy>=1.11        # reads the dataset's labels.mat (MATLAB file)
+pillow>=10.0       # opens images (imported as PIL)
+numpy>=1.26
+scikit-learn>=1.4  # stratified folds, metrics
+matplotlib>=3.8    # plots for EDA and results
+tqdm>=4.66         # progress bars
