@@ -81,9 +81,9 @@ been explained and agreed.
 | 2 | Exploratory data analysis (EDA) | Laptop | Done 8 Oct 2026: no size shortcut; file order follows specimens |
 | 3 | Preprocessing and packing | Laptop | Done 8 Oct 2026: `cells3_100.npz`, 111 MB; Drive upload by the user |
 | 4 | Splitting into folds | Laptop | Done 8 Oct 2026: 152 blocks dealt into 5 balanced folds |
-| 5 | Baseline: pretrained ResNet-18 | Colab | 5 rounds done 9 Oct 2026: test balanced accuracy 0.890 ± 0.028 (`adjusted`, block split); random-split diagnostic pending |
+| 5 | Baseline: pretrained ResNet-18 | Colab | 5 rounds done 9 Oct 2026: test balanced accuracy 0.890 ± 0.028 (`adjusted`, block split); random-split diagnostic skipped (optional, can be run later) |
 | 6 | Comparison with other models | Colab | Postponed (optional) |
-| 7 | Calibration | Colab | Not started |
+| 7 | Calibration | Colab (no GPU) | Notebook `03_calibrate` written and smoke-tested 9 Oct 2026; run by the user pending |
 | 8 | Final evaluation and error analysis | Colab + laptop | Not started |
 | 9 | Prediction script | Laptop | Not started |
 | 10 | Write-up | Laptop | Not started |
@@ -288,7 +288,9 @@ Pooled test confusion matrix, `adjusted` (rows = true class, % of the row):
 - The best epoch ranges from 2 to 15 and validation accuracy moves by several points between epochs,
   so the model is fitted to the training slides within a few epochs. This is the main thing to
   improve.
-- Still to do in this phase: the random-split diagnostic run, and a look at the learning-curve charts.
+- The random-split diagnostic run was skipped on 9 October 2026 (user's decision). It is optional: the
+  Phase 4 brightness-only test already shows the leak (0.864 random against 0.703 blocks).
+- Still to do: a look at the learning-curve charts once the outputs are copied back.
 
 ### Phase 6: Comparison (postponed, optional)
 
@@ -310,6 +312,13 @@ about 90% of the time.
 2. Report the calibration error before and after, with a reliability chart.
 
 **Check:** calibration error does not get worse; temperature recorded.
+
+**Implementation (9 October 2026):** `notebooks/03_calibrate.ipynb`. No GPU and no training: it reads
+the `image_logits.csv` of each round. Per round the temperature is fitted on the validation images
+and measured on the test images. It reports the expected calibration error (15 confidence groups),
+the loss and the Brier score before and after, a table of accuracy when only confident answers are
+accepted, and a reliability chart. Outputs go to `outputs/resnet18_adjusted/calibration/`.
+Smoke-tested on synthetic logits with a known temperature of 2.0 (recovered 1.93 to 2.07).
 
 ### Phase 8: Final evaluation and error analysis
 
